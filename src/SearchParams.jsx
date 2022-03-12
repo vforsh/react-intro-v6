@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react"
-import Pet from "./Pet"
-import { useBreedList } from "./useBreedList"
+import { useContext, useEffect, useState } from "react"
+import { useBreedList } from "./use-breed-list"
 import { Results } from "./Results"
+import { ThemeContext } from "./ThemeContext"
 
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"]
 
-const SearchParams = () => {
+export const SearchParams = () => {
 	const [location, updateLocation] = useState("")
 	const [animal, updateAnimal] = useState("")
 	const [breed, updateBreed] = useState("")
 	const [pets, setPets] = useState([])
 	const [breeds] = useBreedList(animal)
+	const [theme, setTheme] = useContext(ThemeContext)
 
 	useEffect(async () => {
 		requestPets()
@@ -72,11 +73,23 @@ const SearchParams = () => {
 						))}
 					</select>
 				</label>
-				<button>Submit</button>
+				<label htmlFor="theme">
+					Theme
+					<select name="theme"
+					        id="theme"
+					        value={theme}
+					        onChange={e => setTheme(e.target.value)}
+					        onBlur={e => setTheme(e.target.value)}
+					>
+						<option value="darkblue">Dark Blue</option>
+						<option value="pink">Pink</option>
+						<option value="peru">Peru</option>
+						<option value="green">Green</option>
+					</select>
+				</label>
+				<button style={{ backgroundColor: theme }}>Submit</button>
 			</form>
-			<Results pets={pets} />
+			<Results pets={pets}/>
 		</div>
 	)
 }
-
-export default SearchParams
